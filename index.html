@@ -4,8 +4,8 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="apple-mobile-web-app-capable" content="yes">
-<meta name="theme-color" content="#0b1020">
-<title>Roulette Analyzer V1</title>
+<meta name="theme-color" content="#080d18">
+<title>Roulette Analyzer V2</title>
 
 <style>
 * {
@@ -14,79 +14,173 @@
 
 body {
   margin: 0;
-  background: #0b1020;
+  background: #080d18;
   color: white;
-  font-family: -apple-system, BlinkMacSystemFont, Arial, sans-serif;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Arial, sans-serif;
 }
 
 .app {
-  max-width: 520px;
+  max-width: 560px;
   margin: auto;
-  padding: 20px 14px 40px;
+  padding: 18px 13px 45px;
 }
 
 h1 {
   margin: 0;
   font-size: 28px;
+  font-weight: 900;
 }
 
 .subtitle {
   color: #9ca3af;
-  margin: 5px 0 18px;
+  margin: 4px 0 18px;
   font-size: 13px;
 }
 
 .card {
-  background: #171e2e;
-  border: 1px solid #29364d;
+  background: #141b2b;
+  border: 1px solid #28344b;
   border-radius: 18px;
-  padding: 16px;
+  padding: 15px;
   margin-bottom: 12px;
 }
 
 .label {
   color: #9ca3af;
-  font-size: 11px;
+  font-size: 10px;
   text-transform: uppercase;
   letter-spacing: .12em;
+  font-weight: 700;
 }
 
 .target {
-  font-size: 50px;
+  font-size: 54px;
   font-weight: 900;
-  margin: 8px 0 15px;
+  margin: 5px 0 10px;
 }
 
-.neighbors {
+.prediction {
+  background: #101827;
+  border: 1px solid #33425e;
+  border-radius: 16px;
+  padding: 14px;
+  margin-top: 10px;
+}
+
+.prediction-title {
+  font-size: 18px;
+  font-weight: 900;
+  margin-bottom: 5px;
+}
+
+.prediction-sub {
+  color: #9ca3af;
+  font-size: 12px;
+  margin-bottom: 12px;
+}
+
+.number-grid {
+  display: grid;
+  grid-template-columns: repeat(9, 1fr);
+  gap: 5px;
+}
+
+.number {
+  min-height: 39px;
   display: flex;
-  flex-wrap: wrap;
-  gap: 7px;
+  align-items: center;
   justify-content: center;
+  background: #27334a;
+  border-radius: 9px;
+  font-size: 14px;
+  font-weight: 900;
 }
 
-.pocket {
-  background: #26334a;
-  border-radius: 10px;
-  padding: 10px;
-  min-width: 40px;
-  text-align: center;
-  font-weight: 800;
-}
-
-.pocket.target {
+.number.center {
   background: #2563eb;
+}
+
+.number.hot {
+  border: 2px solid #f59e0b;
+}
+
+.number.cold {
+  opacity: .45;
+}
+
+.wheel {
+  width: 285px;
+  height: 285px;
+  margin: 15px auto 5px;
+  border-radius: 50%;
+  border: 10px solid #27334a;
+  position: relative;
+  background: #101827;
+  box-shadow: 0 0 0 3px #0b1220, 0 8px 25px rgba(0,0,0,.35);
+}
+
+.wheel-number {
+  position: absolute;
+  width: 30px;
+  height: 30px;
+  margin-left: -15px;
+  margin-top: -15px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 10px;
+  font-weight: 900;
+  background: #29364d;
+  border: 1px solid #52617a;
+}
+
+.wheel-number.neighbor {
+  background: #2563eb;
+  border-color: #60a5fa;
+}
+
+.wheel-number.target-number {
+  background: #f59e0b;
+  color: #111827;
+  border-color: #fbbf24;
+  transform: scale(1.2);
+  z-index: 5;
+}
+
+.wheel-number.zero {
+  background: #15803d;
+}
+
+.wheel-center {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: 65px;
+  height: 65px;
+  margin-left: -32.5px;
+  margin-top: -32.5px;
+  border-radius: 50%;
+  background: #080d18;
+  border: 2px solid #33425e;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 11px;
+  color: #9ca3af;
+  text-align: center;
 }
 
 .input-row {
   display: flex;
   gap: 8px;
-  margin-top: 10px;
+  margin-top: 9px;
 }
 
 input {
   flex: 1;
   min-width: 0;
-  background: #0d1424;
+  background: #0c1322;
   color: white;
   border: 1px solid #344158;
   border-radius: 12px;
@@ -98,11 +192,11 @@ input {
 button {
   border: 0;
   border-radius: 12px;
-  padding: 13px;
+  padding: 13px 15px;
   background: #2563eb;
   color: white;
-  font-size: 15px;
-  font-weight: 800;
+  font-size: 14px;
+  font-weight: 900;
 }
 
 button.secondary {
@@ -125,27 +219,65 @@ button.danger {
 
 .stats {
   display: grid;
-  grid-template-columns: repeat(3,1fr);
-  gap: 8px;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 7px;
   margin-top: 10px;
 }
 
 .stat {
-  background: #111827;
+  background: #0e1524;
   border-radius: 12px;
-  padding: 12px 5px;
+  padding: 12px 4px;
   text-align: center;
 }
 
 .stat-number {
-  font-size: 21px;
+  font-size: 20px;
   font-weight: 900;
 }
 
 .stat-label {
   color: #9ca3af;
-  font-size: 9px;
+  font-size: 8px;
   margin-top: 3px;
+}
+
+.method-row {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 6px;
+  margin-top: 10px;
+}
+
+.method {
+  background: #29364d;
+  border: 1px solid transparent;
+  border-radius: 10px;
+  padding: 10px 3px;
+  text-align: center;
+  font-size: 12px;
+  font-weight: 900;
+}
+
+.method.active {
+  background: #2563eb;
+  border-color: #60a5fa;
+}
+
+.select-row {
+  display: flex;
+  gap: 7px;
+  margin-top: 9px;
+}
+
+select {
+  flex: 1;
+  background: #0c1322;
+  color: white;
+  border: 1px solid #344158;
+  border-radius: 10px;
+  padding: 10px;
+  font-weight: 700;
 }
 
 .history {
@@ -156,14 +288,38 @@ button.danger {
 }
 
 .history span {
-  background: #111827;
+  background: #0e1524;
   padding: 8px 10px;
   border-radius: 9px;
-  font-weight: 800;
+  font-weight: 900;
 }
 
 .latest {
   background: #2563eb !important;
+}
+
+.hot-list {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 6px;
+  margin-top: 10px;
+}
+
+.hot-item {
+  background: #0e1524;
+  border-radius: 10px;
+  padding: 9px 4px;
+  text-align: center;
+}
+
+.hot-number {
+  font-size: 17px;
+  font-weight: 900;
+}
+
+.hot-count {
+  color: #9ca3af;
+  font-size: 9px;
 }
 
 .note {
@@ -172,10 +328,20 @@ button.danger {
   line-height: 1.5;
 }
 
+.hit {
+  color: #4ade80;
+  font-weight: 900;
+}
+
+.miss {
+  color: #f87171;
+  font-weight: 900;
+}
+
 #status {
   text-align: center;
   min-height: 18px;
-  margin-top: 8px;
+  margin-top: 7px;
   font-size: 12px;
 }
 </style>
@@ -186,25 +352,65 @@ button.danger {
 <div class="app">
 
 <h1>Roulette Analyzer</h1>
+<div class="subtitle">V2 • European Roulette • Wheel Analysis</div>
 
-<div class="subtitle">
-V1 • European Roulette • Neighbors ×4
-</div>
+
+<!-- CURRENT TARGET -->
 
 <div class="card">
 
-<div class="label">Current Target</div>
+<div class="label">Last Spin / Current Target</div>
 
 <div id="target" class="target">—</div>
 
 <div class="label">Physical Wheel Neighborhood</div>
 
-<div id="neighbors" class="neighbors">
+<div id="neighbors" class="number-grid">
 <div class="note">Enter a spin to begin.</div>
 </div>
 
 </div>
 
+
+<!-- PREDICTION -->
+
+<div class="card">
+
+<div class="label">Next Spin Analysis</div>
+
+<div class="prediction">
+
+<div class="prediction-title">
+Neighbors ×<span id="methodDisplay">4</span>
+</div>
+
+<div class="prediction-sub">
+Highlighted numbers are the physical-wheel neighborhood around the current target.
+</div>
+
+<div id="predictionNumbers" class="number-grid">
+<div class="note">Waiting for spin...</div>
+</div>
+
+</div>
+
+</div>
+
+
+<!-- WHEEL -->
+
+<div class="card">
+
+<div class="label">European Roulette Wheel</div>
+
+<div id="wheel" class="wheel">
+<div class="wheel-center">TARGET<br>+4 / -4</div>
+</div>
+
+</div>
+
+
+<!-- ENTER SPIN -->
 
 <div class="card">
 
@@ -218,7 +424,8 @@ type="number"
 inputmode="numeric"
 min="0"
 max="36"
-placeholder="0–36">
+placeholder="0–36"
+>
 
 <button onclick="addSpin()">Add</button>
 
@@ -228,22 +435,53 @@ placeholder="0–36">
 
 <div class="buttons">
 
-<button class="secondary" onclick="undo()">
-Undo
-</button>
+<button class="secondary" onclick="undo()">Undo</button>
 
-<button class="danger" onclick="resetAll()">
-Reset
-</button>
+<button class="danger" onclick="resetAll()">Reset</button>
 
 </div>
 
 </div>
 
+
+<!-- METHOD -->
 
 <div class="card">
 
-<div class="label">Session Statistics</div>
+<div class="label">Neighbors Setting</div>
+
+<div class="method-row">
+
+<div class="method" data-value="2" onclick="setMethod(2)">
+×2
+</div>
+
+<div class="method" data-value="3" onclick="setMethod(3)">
+×3
+</div>
+
+<div class="method active" data-value="4" onclick="setMethod(4)">
+×4
+</div>
+
+<div class="method" data-value="5" onclick="setMethod(5)">
+×5
+</div>
+
+</div>
+
+<div class="note" style="margin-top:10px;">
+The setting represents the number of physical wheel pockets on each side of the target.
+</div>
+
+</div>
+
+
+<!-- SESSION STATS -->
+
+<div class="card">
+
+<div class="label">Prediction Performance</div>
 
 <div class="stats">
 
@@ -258,7 +496,67 @@ Reset
 </div>
 
 <div class="stat">
+<div id="misses" class="stat-number">0</div>
+<div class="stat-label">MISSES</div>
+</div>
+
+</div>
+
+<div class="stats">
+
+<div class="stat">
 <div id="rate" class="stat-number">—</div>
+<div class="stat-label">HIT RATE</div>
+</div>
+
+<div class="stat">
+<div id="streak" class="stat-number">0</div>
+<div class="stat-label">HIT STREAK</div>
+</div>
+
+<div class="stat">
+<div id="best" class="stat-number">0</div>
+<div class="stat-label">BEST STREAK</div>
+</div>
+
+</div>
+
+</div>
+
+
+<!-- RANGE ANALYSIS -->
+
+<div class="card">
+
+<div class="label">Analyze Recent Spins</div>
+
+<div class="select-row">
+
+<select id="range" onchange="renderAll()">
+
+<option value="10">Last 10 Spins</option>
+<option value="25">Last 25 Spins</option>
+<option value="50">Last 50 Spins</option>
+<option value="100">Last 100 Spins</option>
+
+</select>
+
+</div>
+
+<div class="stats">
+
+<div class="stat">
+<div id="rangeSpins" class="stat-number">0</div>
+<div class="stat-label">ANALYZED</div>
+</div>
+
+<div class="stat">
+<div id="rangeHits" class="stat-number">0</div>
+<div class="stat-label">HITS</div>
+</div>
+
+<div class="stat">
+<div id="rangeRate" class="stat-number">—</div>
 <div class="stat-label">HIT RATE</div>
 </div>
 
@@ -267,12 +565,42 @@ Reset
 </div>
 
 
+<!-- HOT NUMBERS -->
+
+<div class="card">
+
+<div class="label">Hot Numbers</div>
+
+<div id="hotNumbers" class="hot-list">
+<div class="note">Enter spins to begin.</div>
+</div>
+
+</div>
+
+
+<!-- COLD NUMBERS -->
+
+<div class="card">
+
+<div class="label">Cold Numbers</div>
+
+<div id="coldNumbers" class="hot-list">
+<div class="note">Enter spins to begin.</div>
+</div>
+
+</div>
+
+
+<!-- HISTORY -->
+
 <div class="card">
 
 <div class="label">Spin History</div>
 
 <div id="history" class="history">
+
 <div class="note">No spins yet.</div>
+
 </div>
 
 </div>
@@ -281,10 +609,8 @@ Reset
 <div class="card">
 
 <div class="note">
-Neighbors ×4 means four physical wheel pockets on
-each side of the target, giving nine pockets total.
-This tool records and analyzes results; it does not
-guarantee the next roulette outcome.
+This tool analyzes recorded roulette results and physical-wheel neighborhoods.
+It does not guarantee or predict a random roulette outcome. Past results do not determine the next spin.
 </div>
 
 </div>
@@ -294,6 +620,10 @@ guarantee the next roulette outcome.
 
 <script>
 
+/* ================================
+   EUROPEAN ROULETTE WHEEL
+================================ */
+
 const wheel = [
 0,32,15,19,4,21,2,25,17,
 34,6,27,13,36,11,30,8,23,
@@ -301,26 +631,39 @@ const wheel = [
 9,22,18,29,7,28,12,35,3,26
 ];
 
+
+/* ================================
+   APP DATA
+================================ */
+
 let spins = JSON.parse(
 localStorage.getItem("rouletteSpins") || "[]"
 );
 
+let neighborCount = 4;
 
-function getNeighbors(target) {
 
-const index = wheel.indexOf(target);
+/* ================================
+   GET NEIGHBORS
+================================ */
 
-if (index === -1) {
-return [];
-}
+function getNeighbors(target, count = neighborCount) {
+
+const index = wheel.indexOf(Number(target));
+
+if (index === -1) return [];
 
 const result = [];
 
-for (let offset = -4; offset <= 4; offset++) {
+for (
+let offset = -count;
+offset <= count;
+offset++
+) {
 
 const position =
-(index + offset + wheel.length) %
-wheel.length;
+(index + offset + wheel.length)
+% wheel.length;
 
 result.push(wheel[position]);
 
@@ -331,20 +674,28 @@ return result;
 }
 
 
-function isNeighbor(target, result) {
+/* ================================
+   CHECK NEIGHBOR
+================================ */
 
-return getNeighbors(target).includes(result);
+function isNeighbor(target, result, count = neighborCount) {
+
+return getNeighbors(target, count)
+.includes(Number(result));
 
 }
 
+
+/* ================================
+   ADD SPIN
+================================ */
 
 function addSpin() {
 
 const input =
 document.getElementById("spin");
 
-const number =
-Number(input.value);
+const number = Number(input.value);
 
 if (
 !Number.isInteger(number) ||
@@ -369,16 +720,22 @@ JSON.stringify(spins)
 
 input.value = "";
 
-render();
+showStatus(
+"Spin " + number + " recorded."
+);
+
+renderAll();
 
 }
 
+
+/* ================================
+   UNDO
+================================ */
 
 function undo() {
 
-if (!spins.length) {
-return;
-}
+if (!spins.length) return;
 
 spins.pop();
 
@@ -387,93 +744,341 @@ localStorage.setItem(
 JSON.stringify(spins)
 );
 
-render();
+renderAll();
 
 }
 
+
+/* ================================
+   RESET
+================================ */
 
 function resetAll() {
 
-if (!confirm("Clear all spin history?")) {
-return;
-}
+if (
+!confirm("Clear all spin history?")
+) return;
 
 spins = [];
 
-localStorage.removeItem("rouletteSpins");
+localStorage.removeItem(
+"rouletteSpins"
+);
 
-render();
+renderAll();
 
 }
 
 
-function render() {
+/* ================================
+   CHANGE METHOD
+================================ */
+
+function setMethod(value) {
+
+neighborCount = value;
+
+document
+.querySelectorAll(".method")
+.forEach(button => {
+
+button.classList.remove("active");
+
+if (
+Number(button.dataset.value) === value
+) {
+
+button.classList.add("active");
+
+}
+
+});
+
+document.getElementById(
+"methodDisplay"
+).textContent = value;
+
+renderAll();
+
+}
+
+
+/* ================================
+   MAIN RENDER
+================================ */
+
+function renderAll() {
 
 renderTarget();
 
+renderPrediction();
+
+renderWheel();
+
 renderStats();
+
+renderRangeAnalysis();
+
+renderHotCold();
 
 renderHistory();
 
 }
 
 
+/* ================================
+   TARGET
+================================ */
+
 function renderTarget() {
 
 const target =
 document.getElementById("target");
 
-const neighbors =
+const container =
 document.getElementById("neighbors");
-
 
 if (!spins.length) {
 
 target.textContent = "—";
 
-neighbors.innerHTML =
+container.innerHTML =
 '<div class="note">Enter a spin to begin.</div>';
 
 return;
 
 }
 
-
 const number =
 spins[spins.length - 1];
 
-target.textContent =
-number;
-
-
-neighbors.innerHTML = "";
+target.textContent = number;
 
 const list =
 getNeighbors(number);
 
-list.forEach((value,index) => {
+container.innerHTML = "";
+
+list.forEach((value, index) => {
 
 const element =
 document.createElement("div");
 
-element.className = "pocket";
+element.className = "number";
 
-if (index === 4) {
-element.classList.add("target");
+if (index === neighborCount) {
+
+element.classList.add("center");
+
 }
 
 element.textContent = value;
 
-neighbors.appendChild(element);
+container.appendChild(element);
 
 });
 
 }
 
 
-function renderStats() {
+/* ================================
+   PREDICTION PANEL
+================================ */
+
+function renderPrediction() {
+
+const container =
+document.getElementById(
+"predictionNumbers"
+);
+
+if (!spins.length) {
+
+container.innerHTML =
+'<div class="note">Waiting for spin...</div>';
+
+return;
+
+}
+
+const target =
+spins[spins.length - 1];
+
+const list =
+getNeighbors(target);
+
+container.innerHTML = "";
+
+list.forEach((value, index) => {
+
+const element =
+document.createElement("div");
+
+element.className = "number";
+
+if (index === neighborCount) {
+
+element.classList.add("center");
+
+}
+
+element.textContent = value;
+
+container.appendChild(element);
+
+});
+
+}
+
+
+/* ================================
+   DRAW WHEEL
+================================ */
+
+function renderWheel() {
+
+const container =
+document.getElementById("wheel");
+
+container
+.querySelectorAll(".wheel-number")
+.forEach(el => el.remove());
+
+if (!spins.length) return;
+
+const target =
+spins[spins.length - 1];
+
+const neighbors =
+getNeighbors(target);
+
+const total =
+wheel.length;
+
+const radius = 112;
+
+wheel.forEach((number, index) => {
+
+const element =
+document.createElement("div");
+
+element.className =
+"wheel-number";
+
+if (neighbors.includes(number)) {
+
+element.classList.add("neighbor");
+
+}
+
+if (number === target) {
+
+element.classList.add(
+"target-number"
+);
+
+}
+
+if (number === 0) {
+
+element.classList.add("zero");
+
+}
+
+const angle =
+(index / total) * Math.PI * 2
+- Math.PI / 2;
+
+const x =
+142.5 +
+Math.cos(angle) * radius;
+
+const y =
+142.5 +
+Math.sin(angle) * radius;
+
+element.style.left =
+x + "px";
+
+element.style.top =
+y + "px";
+
+element.textContent =
+number;
+
+container.appendChild(element);
+
+});
+
+}
+
+
+/* ================================
+   SESSION STATS
+================================ */
+
+function calculateHits(list) {
 
 let hits = 0;
+
+for (
+let i = 1;
+i < list.length;
+i++
+) {
+
+if (
+isNeighbor(
+list[i - 1],
+list[i]
+)
+) {
+
+hits++;
+
+}
+
+}
+
+return hits;
+
+}
+
+
+function renderStats() {
+
+const hits =
+calculateHits(spins);
+
+const opportunities =
+Math.max(
+0,
+spins.length - 1
+);
+
+const misses =
+Math.max(
+0,
+opportunities - hits
+);
+
+let rate = "—";
+
+if (opportunities > 0) {
+
+rate =
+Math.round(
+hits / opportunities * 100
+) + "%";
+
+}
+
+
+/* Streak */
+
+let current = 0;
+
+let best = 0;
 
 for (
 let i = 1;
@@ -488,16 +1093,77 @@ spins[i]
 )
 ) {
 
-hits++;
+current++;
+
+if (current > best) {
+
+best = current;
+
+}
+
+} else {
+
+current = 0;
 
 }
 
 }
 
+document.getElementById(
+"count"
+).textContent =
+spins.length;
+
+document.getElementById(
+"hits"
+).textContent =
+hits;
+
+document.getElementById(
+"misses"
+).textContent =
+misses;
+
+document.getElementById(
+"rate"
+).textContent =
+rate;
+
+document.getElementById(
+"streak"
+).textContent =
+current;
+
+document.getElementById(
+"best"
+).textContent =
+best;
+
+}
+
+
+/* ================================
+   RANGE ANALYSIS
+================================ */
+
+function renderRangeAnalysis() {
+
+const range =
+Number(
+document.getElementById("range").value
+);
+
+const data =
+spins.slice(-range);
+
+const hits =
+calculateHits(data);
 
 const opportunities =
-spins.length - 1;
-
+Math.max(
+0,
+data.length - 1
+);
 
 let rate = "—";
 
@@ -510,23 +1176,163 @@ hits / opportunities * 100
 
 }
 
+document.getElementById(
+"rangeSpins"
+).textContent =
+data.length;
 
-document.getElementById("count")
-.textContent = spins.length;
+document.getElementById(
+"rangeHits"
+).textContent =
+hits;
 
-document.getElementById("hits")
-.textContent = hits;
-
-document.getElementById("rate")
-.textContent = rate;
+document.getElementById(
+"rangeRate"
+).textContent =
+rate;
 
 }
 
 
+/* ================================
+   HOT / COLD
+================================ */
+
+function getFrequency(list) {
+
+const counts = {};
+
+wheel.forEach(number => {
+
+counts[number] = 0;
+
+});
+
+list.forEach(number => {
+
+counts[number]++;
+
+});
+
+return counts;
+
+}
+
+
+function renderHotCold() {
+
+const hot =
+document.getElementById(
+"hotNumbers"
+);
+
+const cold =
+document.getElementById(
+"coldNumbers"
+);
+
+if (!spins.length) {
+
+hot.innerHTML =
+'<div class="note">Enter spins to begin.</div>';
+
+cold.innerHTML =
+'<div class="note">Enter spins to begin.</div>';
+
+return;
+
+}
+
+const range =
+Number(
+document.getElementById("range").value
+);
+
+const data =
+spins.slice(-range);
+
+const counts =
+getFrequency(data);
+
+const sorted =
+wheel
+.slice()
+.sort(
+(a,b) =>
+counts[b] - counts[a]
+);
+
+const hotNumbers =
+sorted.slice(0,5);
+
+const coldNumbers =
+sorted
+.slice()
+.reverse()
+.slice(0,5);
+
+hot.innerHTML = "";
+
+hotNumbers.forEach(number => {
+
+const item =
+document.createElement("div");
+
+item.className =
+"hot-item";
+
+item.innerHTML =
+`
+<div class="hot-number">
+${number}
+</div>
+<div class="hot-count">
+${counts[number]} hit${counts[number] === 1 ? "" : "s"}
+</div>
+`;
+
+hot.appendChild(item);
+
+});
+
+
+cold.innerHTML = "";
+
+coldNumbers.forEach(number => {
+
+const item =
+document.createElement("div");
+
+item.className =
+"hot-item";
+
+item.innerHTML =
+`
+<div class="hot-number">
+${number}
+</div>
+<div class="hot-count">
+${counts[number]} hit${counts[number] === 1 ? "" : "s"}
+</div>
+`;
+
+cold.appendChild(item);
+
+});
+
+}
+
+
+/* ================================
+   HISTORY
+================================ */
+
 function renderHistory() {
 
 const history =
-document.getElementById("history");
+document.getElementById(
+"history"
+);
 
 history.innerHTML = "";
 
@@ -542,31 +1348,50 @@ return;
 spins
 .slice()
 .reverse()
-.forEach((number,index) => {
+.forEach(
+(number,index) => {
 
 const element =
 document.createElement("span");
 
 if (index === 0) {
-element.classList.add("latest");
-}
 
-element.textContent = number;
-
-history.appendChild(element);
-
-});
+element.classList.add(
+"latest"
+);
 
 }
 
+element.textContent =
+number;
+
+history.appendChild(
+element
+);
+
+}
+);
+
+}
+
+
+/* ================================
+   STATUS
+================================ */
 
 function showStatus(message) {
 
-document.getElementById("status")
-.textContent = message;
+document.getElementById(
+"status"
+).textContent =
+message;
 
 }
 
+
+/* ================================
+   ENTER KEY
+================================ */
 
 document
 .getElementById("spin")
@@ -575,13 +1400,20 @@ document
 function(event) {
 
 if (event.key === "Enter") {
+
 addSpin();
+
 }
 
-});
+}
+);
 
 
-render();
+/* ================================
+   START APP
+================================ */
+
+renderAll();
 
 </script>
 
